@@ -12,6 +12,8 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   SocketIO socketIO;
   List<String> messages;
+  List<String> messages_recive;
+
   double height, width;
   TextEditingController textController;
   ScrollController scrollController;
@@ -25,7 +27,7 @@ class _ChatPageState extends State<ChatPage> {
     scrollController = ScrollController();
     //Creating the socket
     socketIO = SocketIOManager().createSocketIO(
-      'https://real-chat-1234.herokuapp.com',
+      'http://192.168.1.4:1010',
       '/',
     );
     //Call init before doing anything with socket
@@ -81,13 +83,21 @@ class _ChatPageState extends State<ChatPage> {
   Widget buildChatInput() {
     return Container(
       width: width * 0.7,
-      padding: const EdgeInsets.all(2.0),
-      margin: const EdgeInsets.only(left: 40.0),
-      child: TextField(
-        decoration: InputDecoration.collapsed(
-          hintText: 'Send a message...',
+      padding: const EdgeInsets.all(5.0),
+      //margin: const EdgeInsets.only(left: 10.0, right: 20),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey[300]),
+        borderRadius: BorderRadius.circular(25.0),
+        shape: BoxShape.rectangle,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: TextField(
+          decoration: InputDecoration.collapsed(
+            hintText: 'Send a message...',
+          ),
+          controller: textController,
         ),
-        controller: textController,
       ),
     );
   }
@@ -124,6 +134,7 @@ class _ChatPageState extends State<ChatPage> {
       height: height * 0.1,
       width: width,
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           buildChatInput(),
           buildSendButton(),
